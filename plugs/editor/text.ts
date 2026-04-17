@@ -138,3 +138,37 @@ async function insertMarker(marker: string) {
     return true;
   }
 }
+
+export async function headingSelection(cmdDef: any) {
+  let text = await editor.getText();
+  const selection = await editor.getSelection();
+  let from = selection.from;
+  while (from > 0 && text[from - 1] !== "\n") {
+    from--;
+  }
+  let to = selection.to;
+  while (to < text.length && text[to] !== "\n") {
+    to++;
+  }
+  
+  let lineText = text.slice(from, to);
+  let level = cmdDef.level || 1;
+  const prefix = "#".repeat(level) + " ";
+  
+  // Remove existing heading if any
+  const existingMatch = lineText.match(/^(#+)\s(.*)/);
+  if (existingMatch) {
+    if (existingMatch[1].length === level) {
+      // Toggle off
+      lineText = existingMatch[2];
+    } else {
+      // Change level
+      lineText = prefix + existingMatch[2];
+    }
+  } else {
+    // Add heading
+    lineText = prefix + lineText;
+  }
+  
+  await editor.replaceRange(from, to, lineText);
+}

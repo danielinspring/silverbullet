@@ -242,6 +242,30 @@ functions:
       wrapper: "=="
       requireMode: rw
       requireEditor: page
+  heading1:
+    path: ./text.ts:headingSelection
+    command:
+      name: "Text: Heading 1"
+      key: "Ctrl-1"
+      level: 1
+      requireMode: rw
+      requireEditor: page
+  heading2:
+    path: ./text.ts:headingSelection
+    command:
+      name: "Text: Heading 2"
+      key: "Ctrl-2"
+      level: 2
+      requireMode: rw
+      requireEditor: page
+  heading3:
+    path: ./text.ts:headingSelection
+    command:
+      name: "Text: Heading 3"
+      key: "Ctrl-3"
+      level: 3
+      requireMode: rw
+      requireEditor: page
   centerCursor:
     path: "./editor.ts:centerCursorCommand"
     command:

@@ -1,17 +1,18 @@
-LDFLAGS = -X main.buildTime=$$(date -u +%Y-%m-%dT%H:%M:%SZ)
-CLI_VERSION = $$(sed -n 's/.*"\([^"]*\)".*/\1/p' public_version.ts)
+BUILD_TIME = $(shell node -p "new Date().toISOString()")
+LDFLAGS = -X main.buildTime=$(BUILD_TIME)
+CLI_VERSION = $(shell node -p "require('./package.json').version")
 CLI_LDFLAGS = -X main.version=$(CLI_VERSION)
 
 .PHONY: build build-for-docker docker build-server-releases build-cli-releases clean check fmt test test-integration test-e2e bench generate website
 
 build:
-	# Build client
+	@echo Build client
 	npm run build
-	# Build plug-compile
+	@echo Build plug-compile
 	npm run build:plug-compile
-	# Build server
+	@echo Build server
 	go build -ldflags "$(LDFLAGS)"
-	# Build Go CLI
+	@echo Build Go CLI
 	go build -ldflags "$(CLI_LDFLAGS)" -o silverbullet-cli ./cmd/cli
 
 setup:
@@ -50,38 +51,38 @@ clean:
 	rm -f silverbullet-cli silverbullet-cli.exe silverbullet-cli-*.zip
 
 check:
-	# Frontend type check
+	@echo Frontend type check
 	npm run check
-	# Frontend lint
+	@echo Frontend lint
 	npx biome lint .
-	# Backend lint
+	@echo Backend lint
 	go vet
 
 fmt:
-	# Reformat frontend
+	@echo Reformat frontend
 	npx biome format --write .
-	# Reformat backend
+	@echo Reformat backend
 	go fmt
 
 test:
-	# Run frontend tests
+	@echo Run frontend tests
 	npx vitest run
-	# Run backend tests
+	@echo Run backend tests
 	go test ./server/...
 
 test-integration:
-	# Run headless Chrome integration tests (requires Chrome installed)
+	@echo Run headless Chrome integration tests (requires Chrome installed)
 	go test -tags=integration ./server/... ./cli/... -v -timeout 300s
 
 test-e2e: build
 	npx playwright test
 
 bench:
-	# Run frontend benchmarks
+	@echo Run frontend benchmarks
 	npm run bench
 
 generate:
-	# Regenerate the Lua parser from the the grammar
+	@echo Regenerate the Lua parser from the the grammar
 	npx @lezer/generator@1.5.1 client/space_lua/lua.grammar -o client/space_lua/parse-lua.js
 
 website: build

@@ -38,6 +38,24 @@ function encodeExtensionDot(url: string): string {
   return url;
 }
 
+function decodeBase64UrlUtf8(input: string): string {
+  const base64 = input.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+  const binary = atob(padded);
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
+function normalizeSpacePath(path: string): string {
+  // Ignore trailing separators in comparisons.
+  const trimmed = path.replace(/[\\/]+$/, "");
+  // Windows paths should be case-insensitive and use a stable separator.
+  if (/^[A-Za-z]:[\\/]/.test(trimmed)) {
+    return trimmed.replace(/\//g, "\\").toLowerCase();
+  }
+  return trimmed.replace(/\\/g, "/");
+}
+
 export class HttpSpacePrimitives implements SpacePrimitives {
   constructor(
     readonly url: string,
@@ -159,14 +177,24 @@ export class HttpSpacePrimitives implements SpacePrimitives {
    * The /.fs file listing and /.ping endpoints both expose the currently exposed space path, if this doesn't match what the client expects, the client has to restart
    */
   async validateSpacePathFromHeaders(resp: Response) {
+    const encodedSpacePath = resp.headers.get("X-Space-Path-Encoded");
+    let actualSpacePath = resp.headers.get("X-Space-Path");
+    if (encodedSpacePath) {
+      try {
+        actualSpacePath = decodeBase64UrlUtf8(encodedSpacePath);
+      } catch (e) {
+        console.warn("Could not decode X-Space-Path-Encoded header", e);
+      }
+    }
     if (
       resp.status === 200 &&
       this.expectedSpacePath &&
-      resp.headers.get("X-Space-Path") &&
-      resp.headers.get("X-Space-Path") !== this.expectedSpacePath
+      actualSpacePath &&
+      normalizeSpacePath(actualSpacePath) !==
+        normalizeSpacePath(this.expectedSpacePath)
     ) {
       console.log("Expected space path", this.expectedSpacePath);
-      console.log("Got space path", resp.headers.get("X-Space-Path"));
+      console.log("Got space path", actualSpacePath);
       await flushCachesAndUnregisterServiceWorker();
       this.authErrorCallback(wrongSpacePathError.message, "reload");
     }

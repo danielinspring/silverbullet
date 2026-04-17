@@ -60,6 +60,7 @@ func Router(config *ServerConfig) chi.Router {
 		spaceConfig := spaceConfigFromContext(r.Context())
 		w.Header().Set("Cache-Control", "no-cache")
 		w.Header().Set("X-Space-Path", spaceConfig.SpaceFolderPath)
+		w.Header().Set("X-Space-Path-Encoded", encodedSpacePathHeaderValue(spaceConfig.SpaceFolderPath))
 		w.Header().Set("X-Server-Version", config.Version)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))

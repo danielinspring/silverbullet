@@ -5,6 +5,7 @@ import {
 } from "./components/command_palette.tsx";
 import { FilterList } from "./components/filter.tsx";
 import { AnythingPicker } from "./components/anything_picker.tsx";
+import { FormattingToolbar } from "./components/formatting_toolbar.tsx";
 import { TopBar } from "./components/top_bar.tsx";
 import reducer from "./reducer.ts";
 import {
@@ -558,7 +559,10 @@ export class MainUI {
           {viewState.panels.lhs.mode !== undefined && (
             <Panel config={viewState.panels.lhs} editor={client} />
           )}
-          <div id="sb-editor" />
+          <div style={{display: "flex", flexDirection: "column", width: "100%", overflow: "hidden"}}>
+            <FormattingToolbar client={client} />
+            <div id="sb-editor" />
+          </div>
           {viewState.panels.rhs.mode !== undefined && (
             <Panel config={viewState.panels.rhs} editor={client} />
           )}
