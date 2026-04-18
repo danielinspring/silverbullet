@@ -7,6 +7,7 @@ import { FilterList } from "./components/filter.tsx";
 import { AnythingPicker } from "./components/anything_picker.tsx";
 import { FormattingToolbar } from "./components/formatting_toolbar.tsx";
 import { FileExplorer } from "./components/file_explorer.tsx";
+import { SettingsModal } from "./components/settings_modal.tsx";
 import { TopBar } from "./components/top_bar.tsx";
 import reducer from "./reducer.ts";
 import {
@@ -473,6 +474,13 @@ export class MainUI {
                 dispatch({ type: "toggle-sidebar" });
               },
             },
+            {
+              icon: featherIcons.Settings,
+              description: "Settings",
+              callback: () => {
+                dispatch({ type: "toggle-settings" });
+              },
+            },
             // Custom action buttons
             ...actionButtons
               .filter(
@@ -593,6 +601,12 @@ export class MainUI {
           <div className="sb-bhs">
             <Panel config={viewState.panels.bhs} editor={client} />
           </div>
+        )}
+        {viewState.showSettings && (
+          <SettingsModal 
+            client={client} 
+            onClose={() => dispatch({ type: "toggle-settings" })} 
+          />
         )}
       </>
     );

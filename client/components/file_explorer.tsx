@@ -114,7 +114,7 @@ export function FileExplorer({ client, onClose }: { client: Client, onClose: () 
         style={itemStyle}
         onClick={() => {
           if (!isCurrent) {
-            client.navigate({ path: node.path }).catch(console.error);
+            client.navigate({ path: node.path as any }).catch(console.error);
           } else {
             client.focus();
           }

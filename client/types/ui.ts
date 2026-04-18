@@ -32,6 +32,7 @@ export type AppViewState = {
   isStandalone: boolean;
   showPageNavigator: boolean;
   showSidebar: boolean;
+  showSettings: boolean;
   showCommandPalette: boolean;
   showCommandPaletteContext?: string;
   unsavedChanges: boolean;
@@ -80,6 +81,7 @@ export const initialViewState: AppViewState = {
   isLoading: false,
   showPageNavigator: false,
   showSidebar: false,
+  showSettings: false,
   showCommandPalette: false,
   pageNavigatorMode: "page",
   unsavedChanges: false,
@@ -128,6 +130,7 @@ export type Action =
   | { type: "start-navigate"; mode: "page" | "meta" | "document" | "all" }
   | { type: "stop-navigate" }
   | { type: "toggle-sidebar" }
+  | { type: "toggle-settings" }
   | {
       type: "update-commands";
       commands: Map<string, Command>;

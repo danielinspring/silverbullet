@@ -120,6 +120,11 @@ export default function reducer(
         ...state,
         showSidebar: !state.showSidebar,
       };
+    case "toggle-settings":
+      return {
+        ...state,
+        showSettings: !state.showSettings,
+      };
 
     case "show-palette": {
       return {
