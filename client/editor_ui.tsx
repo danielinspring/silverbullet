@@ -6,6 +6,7 @@ import {
 import { FilterList } from "./components/filter.tsx";
 import { AnythingPicker } from "./components/anything_picker.tsx";
 import { FormattingToolbar } from "./components/formatting_toolbar.tsx";
+import { FileExplorer } from "./components/file_explorer.tsx";
 import { TopBar } from "./components/top_bar.tsx";
 import reducer from "./reducer.ts";
 import {
@@ -465,6 +466,13 @@ export class MainUI {
                   },
                 ]
               : []),
+            {
+              icon: featherIcons.Folder,
+              description: "Toggle Explorer",
+              callback: () => {
+                dispatch({ type: "toggle-sidebar" });
+              },
+            },
             // Custom action buttons
             ...actionButtons
               .filter(
@@ -556,6 +564,12 @@ export class MainUI {
           }
         />
         <div id="sb-main">
+          {viewState.showSidebar && (
+            <FileExplorer 
+              client={client} 
+              onClose={() => dispatch({ type: "toggle-sidebar" })} 
+            />
+          )}
           {viewState.panels.lhs.mode !== undefined && (
             <Panel config={viewState.panels.lhs} editor={client} />
           )}

@@ -115,6 +115,11 @@ export default function reducer(
         ...state,
         showPageNavigator: false,
       };
+    case "toggle-sidebar":
+      return {
+        ...state,
+        showSidebar: !state.showSidebar,
+      };
 
     case "show-palette": {
       return {

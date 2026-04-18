@@ -31,6 +31,7 @@ export type AppViewState = {
   isMobile: boolean;
   isStandalone: boolean;
   showPageNavigator: boolean;
+  showSidebar: boolean;
   showCommandPalette: boolean;
   showCommandPaletteContext?: string;
   unsavedChanges: boolean;
@@ -78,6 +79,7 @@ export type AppViewState = {
 export const initialViewState: AppViewState = {
   isLoading: false,
   showPageNavigator: false,
+  showSidebar: false,
   showCommandPalette: false,
   pageNavigatorMode: "page",
   unsavedChanges: false,
@@ -125,6 +127,7 @@ export type Action =
   | { type: "update-document-list"; allDocuments: DocumentMeta[] }
   | { type: "start-navigate"; mode: "page" | "meta" | "document" | "all" }
   | { type: "stop-navigate" }
+  | { type: "toggle-sidebar" }
   | {
       type: "update-commands";
       commands: Map<string, Command>;
