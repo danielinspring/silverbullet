@@ -113,7 +113,11 @@ export function FileExplorer({ client, onClose }: { client: Client, onClose: () 
         key={node.path}
         style={itemStyle}
         onClick={() => {
-          client.navigate({ path: node.path }).catch(console.error);
+          if (!isCurrent) {
+            client.navigate({ path: node.path }).catch(console.error);
+          } else {
+            client.focus();
+          }
         }}
         onMouseOver={(e) => {
           if (!isCurrent) e.currentTarget.style.backgroundColor = "var(--ui-border-color)";
