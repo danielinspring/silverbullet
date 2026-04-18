@@ -14,23 +14,25 @@ export function FormattingToolbar({ client }: { client: Client }) {
 
   const toolbarStyle = {
     display: "flex",
-    gap: "5px",
-    padding: "5px 10px",
+    gap: "8px",
+    padding: "8px 10px",
     backgroundColor: "var(--top-background-color)",
     borderBottom: "1px solid var(--ui-border-color)",
     overflowX: "auto" as const,
+    justifyContent: "center",
+    flexShrink: 0,
   };
 
   const btnStyle = {
     background: "transparent",
     border: "none",
     cursor: "pointer",
-    padding: "4px",
+    padding: "6px",
     color: "var(--primary-color)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "3px",
+    borderRadius: "4px",
   };
 
   const buttons = [

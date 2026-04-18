@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "silverbullet.exe"
-  cmd = "powershell -ExecutionPolicy Bypass -File build.ps1"
+  cmd = "build.bat"
   # delay = 10000
   exclude_dir = ["node_modules", "website", "scripts", "client_bundle", "dist"]
   exclude_file = ["public_version.ts"]
